@@ -523,6 +523,28 @@ int check_overlap(int x, int y)
 **********************************/
 void lock_block(int x, int y)
 {
+	int i, j;		//ループカウンタ
+
+	for (i = 0; i < BLOCK_TROUT_SIZE; i++)
+	{
+		for (j = 0; j < BLOCK_TROUT_SIZE; j++)
+		{
+			if (DropBlock[i][j] != E_BLOCK_EMPTY)
+			{
+				Field[y + i][x + j] = DropBlock[i][j];
+			}
+		}
+	}
+	PlaySoundMem(SoundEffect[1], DX_PLAYTYPE_BACK, TRUE);
+}
+
+/**********************************
+*ブロック機能:ブロックの横一列確認処理
+* 引　数:なし
+* 戻り値:なし
+**********************************/
+void check_line(void)
+{
 	int i, j, k;		//ループカウンタ
 
 	for (i = 0; i < FIELD_HEIGHT - 1; i++)
