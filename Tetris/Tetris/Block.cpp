@@ -127,7 +127,7 @@ int Block_Initialize(void)
 	int i = 0;
 
 	//ブロックの画像の読込み
-	ret = LoadDivGraph("images/block.ping", E_BLOCK_IMAGE_MAX, 10, 1, BLOCK_SIZE, BLOCK_SIZE, BlockImage);
+	ret = LoadDivGraph("images/block.png", E_BLOCK_IMAGE_MAX, 10, 1, BLOCK_SIZE, BLOCK_SIZE, BlockImage);
 
 	//SEの読込み
 	SoundEffect[0] = LoadSoundMem("sounds/SE3.mp3");
@@ -254,7 +254,7 @@ void Block_Draw(void)
 				BLOCK_NEXT_POS_Y, BlockImage[Next[i][j]], TRUE);
 			//ストックされたブロックを描画
 			DrawGraph(BLOCK_SIZE * j + BLOCK_STOCK_POS_X, BLOCK_SIZE * i +
-				BLOCK_STOCK_POS_Y, BlockImage[Next[i][j]], TRUE);
+				BLOCK_STOCK_POS_Y, BlockImage[Stock[i][j]], TRUE);
 		}
 	}
 	//落ちてくるブロックの描画
@@ -481,7 +481,7 @@ void turn_block(int clockwise)
 		{
 			DropBlock_X--;
 		}
-		if (check_overlap(DropBlock_X, DropBlock_Y) && DropBlock_X <= E_BLOCK_WALL)
+		if (check_overlap(DropBlock_X, DropBlock_Y) && DropBlock_X <= E_BLOCK_EMPTY)
 		{
 			DropBlock_X++;
 		}

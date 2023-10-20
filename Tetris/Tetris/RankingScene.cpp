@@ -326,7 +326,7 @@ void ranking_input_name_draw(void)
 		DrawFormatString((i % 13 * 50) + 300, (i / 13 * 50) + 430, GetColor(255, 255,
 	255), "%-3c", 'A' + i);
 	}
-	for (i = 2; i < 10; i++)
+	for (i = 0; i < 10; i++)
 	{
 		DrawFormatString((i % 13 * 50) + 300, (i / 13 * 50) + 530, GetColor(255, 255,
 	255), "%-3c", '0' + i);
