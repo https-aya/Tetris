@@ -109,7 +109,7 @@ void RankingScene_Draw(void)
 		default:
 			for (i = 0; i < RANKING_MAX; i++)
 			{
-				DrawFormatString(20, 20 + (i * 25), GetColor(255, 255, 255), "%2d,%10s,%10d"
+				DrawFormatString(20, 10 + (i * 25), GetColor(255, 255, 255), "%2d,%10s,%10d"
 	, Ranking_Data[i].rank, Ranking_Data[i].name, Ranking_Data[i].score);
 			}
 			break;

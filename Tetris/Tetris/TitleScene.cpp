@@ -128,6 +128,7 @@ void TitleScene_Draw(void)
 	DrawString(300, 300, "スタート", GetColor(255, 255, 255));
 	DrawString(300, 350, "ランキング", GetColor(255, 255, 255));
 	DrawString(300, 400, "エンド", GetColor(255, 255, 255));
+	SetFontSize(20);
 
 	DrawCircle(275, 325 + (cursor_number * 50), 15, GetColor(255, 0, 0));
 }
