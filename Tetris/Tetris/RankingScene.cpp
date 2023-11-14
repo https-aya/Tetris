@@ -194,6 +194,10 @@ void file_write(void)
 		}
 
 		fclose(fp);
+		for (int i = 0; New_Score.name[i] == '\0'; i++)
+		{
+			New_Score.name[i] = 0;
+		}
 	}
 }
 
