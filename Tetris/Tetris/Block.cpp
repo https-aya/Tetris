@@ -115,6 +115,7 @@ void turn_block(int clockwise);				//ブロック回転処理
 int  check_overlap(int x, int y);			//範囲外チェック処理
 void lock_block(int x, int y);				//着地したブロックを固定済みに変更する処理
 void check_line(void);						//ブロックの横一列確認処理
+void corv_Block(void);
 
 /**********************************
 *ブロック機能:初期化処理
@@ -176,6 +177,7 @@ void Block_Update(void)
 {
 	//ブロックの移動処理
 	move_block();
+	check_line();
 
 	//ブロックのストック
 	if ((GetButtonDown(XINPUT_BUTTON_LEFT_SHOULDER) == TRUE) ||
@@ -203,7 +205,7 @@ void Block_Update(void)
 	}
 
 	//落下処理
-	WaitTime++;		//カウンタの更新
+	WaitTime += Get_Level();		//カウンタの更新
 	if (WaitTime > DROP_SPEED)
 	{
 		if (check_overlap(DropBlock_X, DropBlock_Y + 1) == TRUE)
@@ -546,6 +548,7 @@ void lock_block(int x, int y)
 void check_line(void)
 {
 	int i, j, k;		//ループカウンタ
+	DeleteLine = 0;
 
 	for (i = 0; i < FIELD_HEIGHT - 1; i++)
 	{
