@@ -75,26 +75,9 @@ void GameMainScene_Update(void)
 		Score += Line_Count * 50;
 	}
 
-
-	if (Score < 500)
+	if (Level < 5)
 	{
-		Level = 1;
-	}
-	else if (Score < 1000)
-	{
-		Level = 2;
-	}
-	else if (Score < 1500)
-	{
-		Level = 3;
-	}
-	else if (Score < 2000)
-	{
-		Level = 4;
-	}
-	else if (Score < 2500)
-	{
-		Level = 5;
+		Level = Score / 500 + 1;
 	}
 
 	//Ä¶‚Å‚«‚È‚­‚È‚Á‚½‚ç
