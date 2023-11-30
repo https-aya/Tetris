@@ -333,12 +333,13 @@ void ranking_input_name_draw(void)
 	}
 	for (i = 0; i < 10; i++)
 	{
-		DrawFormatString((i % 13 * 50) + 300, (i / 13 * 50) + 530, GetColor(255, 255,
-	255), "%-3c", '0' + i);
+		DrawFormatString((i % 13 * 50) + 300, 530, GetColor(255, 255,255), "%-3c", '0' + i);
 	}
 
 	DrawFormatString(300, 220, GetColor(255, 255, 255), ">%s", New_Score.name);
-
+	SetFontSize(35);
+	DrawFormatString(790, 530, 0xffffff, "消");
+	DrawFormatString(840, 530, 0xffffff, "決");
 	SetFontSize(20);
 
 	//選択している文字をフォーカスしている
