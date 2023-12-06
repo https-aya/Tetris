@@ -95,6 +95,7 @@ BLOCK_STATE Field[FIELD_HEIGHT][FIELD_WIDTH];				//フィールドの配列
 BLOCK_STATE Next[BLOCK_TROUT_SIZE][BLOCK_TROUT_SIZE];		//待機状態のブロック
 BLOCK_STATE	Stock[BLOCK_TROUT_SIZE][BLOCK_TROUT_SIZE];		//ストックのブロック
 BLOCK_STATE DropBlock[BLOCK_TROUT_SIZE][BLOCK_TROUT_SIZE];	//落ちるブロック
+BLOCK_STATE DefoultBlock[BLOCK_TROUT_SIZE][BLOCK_TROUT_SIZE];
 int DropBlock_X;											//落ちるブロックのX座標
 int DropBlock_Y;											//落ちるブロックのY座標
 
@@ -337,6 +338,7 @@ void create_block(void)
 		for (j = 0; j < BLOCK_TROUT_SIZE; j++)
 		{
 			DropBlock[i][j] = Next[i][j];
+			DefoultBlock[i][j] = Next[i][j];
 			Next[i][j] = (BLOCK_STATE)C_BLOCK_TABLE[block_type][i][j];
 		}
 	}
@@ -413,8 +415,9 @@ void change_block(void)
 		{
 			for (j = 0; j < BLOCK_TROUT_SIZE; j++)
 			{
-				temp[i][j] = DropBlock[i][j];
+				temp[i][j] = DefoultBlock[i][j];
 				DropBlock[i][j] = Stock[i][j];
+				DefoultBlock[i][j] = Stock[i][j];
 				Stock[i][j] = temp[i][j];
 			}
 		}
@@ -426,7 +429,7 @@ void change_block(void)
 		{
 			for (j = 0; j < BLOCK_TROUT_SIZE; j++)
 			{
-				Stock[i][j] = DropBlock[i][j];
+				Stock[i][j] = DefoultBlock[i][j];
 			}
 		}
 		//新しいブロックの設定と次のブロックの生成
