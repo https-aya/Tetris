@@ -19,6 +19,7 @@
 #define DROP_SPEED				(60)	//落下時間
 #define TURN_CROCKWICE			(0)		//時計回りに回転させる
 #define TURN_ANTICROCKWICE		(1)		//反時計回りに回転させる
+#define BOM_SIZE				(40)
 
 /**********************************
 *型定義
@@ -99,11 +100,17 @@ BLOCK_STATE DefoultBlock[BLOCK_TROUT_SIZE][BLOCK_TROUT_SIZE];
 int DropBlock_X;											//落ちるブロックのX座標
 int DropBlock_Y;											//落ちるブロックのY座標
 
-int WaitTime;												//待機時間
+float WaitTime;												//待機時間
 int Stock_Flg;												//ストックフラグ
 int Generate_Flg;											//生成フラグ
 int DeleteLine;												//消したラインの数
 int SoundEffect[3];											//SE
+int k;
+int Bom;
+float BomX1, BomY1;
+float BomX2, BomY2;
+int Bomflg;
+int BomImage;
 
 /**********************************
 *プロトタイプ宣言
@@ -116,7 +123,8 @@ void turn_block(int clockwise);				//ブロック回転処理
 int  check_overlap(int x, int y);			//範囲外チェック処理
 void lock_block(int x, int y);				//着地したブロックを固定済みに変更する処理
 void check_line(void);						//ブロックの横一列確認処理
-void corv_Block(void);
+void move_box(void);
+void bom_line(void);
 
 /**********************************
 *ブロック機能:初期化処理
@@ -157,6 +165,16 @@ int Block_Initialize(void)
 	//消したラインの数の初期化
 	DeleteLine = 0;
 
+	k = 0;
+
+	BomX1 = 36.0f;
+	BomY1 = 6748.0f;
+
+	BomX2 = 396.0f;
+	BomY2 = 720.0f;
+
+	Bom = 2;
+	Bomflg = 0;
 	//エラーチェック
 	for (i = 0; i < 3; i++)
 	{
@@ -176,54 +194,76 @@ int Block_Initialize(void)
 **********************************/
 void Block_Update(void)
 {
-	//ブロックの移動処理
-	move_block();
-	check_line();
 
-	//ブロックのストック
-	if ((GetButtonDown(XINPUT_BUTTON_LEFT_SHOULDER) == TRUE) ||
-		(GetButtonDown(XINPUT_BUTTON_RIGHT_SHOULDER) == TRUE))
+	if (k == 0)
 	{
-		//生成可能であれば
-		if (Generate_Flg == TRUE)
+		if (GetButtonDown(XINPUT_BUTTON_LEFT_SHOULDER) == TRUE)
 		{
-			change_block();			//ストック交換処理
-			//ブロックの回転を正位置にする
+			k = 1;
+		}
+		//ブロックの移動処理
+		move_block();
+		check_line();
+
+		//ブロックのストック
+		if ((GetButtonDown(XINPUT_BUTTON_LEFT_SHOULDER) == TRUE) ||
+			(GetButtonDown(XINPUT_BUTTON_RIGHT_SHOULDER) == TRUE))
+		{
+			//生成可能であれば
+			if (Generate_Flg == TRUE)
+			{
+				change_block();			//ストック交換処理
+				//ブロックの回転を正位置にする
+			}
+		}
+
+		//ブロックの回転(反時計回り）
+		if ((GetButtonDown(XINPUT_BUTTON_A) == TRUE) ||
+			(GetButtonDown(XINPUT_BUTTON_Y) == TRUE))
+		{
+			turn_block(TURN_ANTICROCKWICE);
+		}
+		//ブロックの回転(時計回り）
+		if ((GetButtonDown(XINPUT_BUTTON_B) == TRUE) ||
+			(GetButtonDown(XINPUT_BUTTON_X) == TRUE))
+		{
+			turn_block(TURN_CROCKWICE);
+		}
+
+		//落下処理
+		WaitTime++;		//カウンタの更新
+		if (WaitTime > DROP_SPEED - (Get_Level() * 2))
+		{
+			if (check_overlap(DropBlock_X, DropBlock_Y + 1) == TRUE)
+			{
+				DropBlock_Y++;
+			}
+			else
+			{
+				//ブロックの固定
+				lock_block(DropBlock_X, DropBlock_Y);
+				//ブロックの消去とブロックを下ろす処理
+				check_line();
+				//新しいブロックの生成
+				create_block();
+			}
+			//カウンタの初期化
+			WaitTime = 0;
 		}
 	}
-
-	//ブロックの回転(反時計回り）
-	if ((GetButtonDown(XINPUT_BUTTON_A) == TRUE) ||
-		(GetButtonDown(XINPUT_BUTTON_Y) == TRUE))
+	else
 	{
-		turn_block(TURN_ANTICROCKWICE);
-	}
-	//ブロックの回転(時計回り）
-	if ((GetButtonDown(XINPUT_BUTTON_B) == TRUE) ||
-		(GetButtonDown(XINPUT_BUTTON_X) == TRUE))
-	{
-		turn_block(TURN_CROCKWICE);
-	}
-
-	//落下処理
-	WaitTime += Get_Level();		//カウンタの更新
-	if (WaitTime > DROP_SPEED)
-	{
-		if (check_overlap(DropBlock_X, DropBlock_Y + 1) == TRUE)
+		move_box();
+		if (GetButtonDown(XINPUT_BUTTON_B) == TRUE)
 		{
-			DropBlock_Y++;
+			Bom--;
+			Bomflg = 1;
+			bom_line();
 		}
-		else
+		if (GetButtonDown(XINPUT_BUTTON_A) == TRUE)
 		{
-			//ブロックの固定
-			lock_block(DropBlock_X, DropBlock_Y);
-			//ブロックの消去とブロックを下ろす処理
-			check_line();
-			//新しいブロックの生成
-			create_block();
+			k = 0;
 		}
-		//カウンタの初期化
-		WaitTime = 0;
 	}
 }
 
@@ -235,6 +275,10 @@ void Block_Update(void)
 void Block_Draw(void)
 {
 	int i, j;			//ループカウンタ
+	if (k == 1)
+	{
+		DrawBoxAA(BomX1, BomY1, BomX2, BomY2, 0xff4500, FALSE, 5);
+	}
 
 	//フィールドのブロックを描画
 	for (i = 0; i < FIELD_HEIGHT; i++)
@@ -269,6 +313,11 @@ void Block_Draw(void)
 			BlockImage[DropBlock[i][j]], TRUE);
 		}
 	}
+
+	for (i = 0; i < Bom; i++)
+	{
+		DrawGraph((650 + i * BOM_SIZE), 672, BomImage, TRUE);
+	}
 }
 
 /**********************************
@@ -291,6 +340,10 @@ int Get_Line(void)
 	return DeleteLine;
 }
 
+void Set_Bom(int bom)
+{
+	Bom += bom;
+}
 /**********************************
 *ブロック機能:フィールド生成処理
 * 引　数:なし

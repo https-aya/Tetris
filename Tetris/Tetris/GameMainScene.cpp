@@ -37,6 +37,7 @@ int GameMainScene_Initialize(void)
 	BackGround_image = LoadGraph("images/stage.png");
 	BackGround_sound = LoadSoundMem("sounds/BGM017.ogg");
 	GameOver_sound = LoadSoundMem("sounds/GameOver.mp3");
+	Score = 0;
 
 	//エラーチェック
 	if (BackGround_image == -1)
