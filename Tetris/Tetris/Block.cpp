@@ -111,6 +111,7 @@ float BomX1, BomY1;
 float BomX2, BomY2;
 int Bomflg;
 int BomImage;
+int Combo;
 
 /**********************************
 *プロトタイプ宣言
@@ -343,6 +344,11 @@ int Get_Line(void)
 void Set_Bom(int bom)
 {
 	Bom += bom;
+}
+
+int Get_Combo(void)
+{
+	return Combo;
 }
 /**********************************
 *ブロック機能:フィールド生成処理
@@ -614,6 +620,7 @@ void check_line(void)
 			//行の途中が開いているか?
 			if (Field[i][j] == E_BLOCK_EMPTY)
 			{
+				Combo = 0;
 				break;
 			}
 		}
@@ -630,6 +637,7 @@ void check_line(void)
 				for (j = 1; j < FIELD_WIDTH; j++)
 				{
 					Field[k][j] = Field[k - 1][j];
+					Combo++;
 				}
 			}
 			PlaySoundMem(SoundEffect[0], DX_PLAYTYPE_BACK, TRUE);

@@ -66,15 +66,29 @@ void GameMainScene_Update(void)
 	int Line_Count;
 
 	Line_Count = Get_Line();
-
-	if (Line_Count >= 4)
+	if (Get_Combo() < 0)
 	{
-		Score += Line_Count * 50 * 2;
+		if (Line_Count >= 4)
+		{
+			Score += Line_Count * 50 * 2;
+		}
+		else
+		{
+			Score += Line_Count * 50;
+		}
 	}
 	else
 	{
-		Score += Line_Count * 50;
+		if (Line_Count >= 4)
+		{
+			Score += Line_Count * 50 * 2 * Get_Combo();
+		}
+		else
+		{
+			Score += Line_Count * 50 * Get_Combo();
+		}
 	}
+
 
 	if (Level < 5)
 	{
