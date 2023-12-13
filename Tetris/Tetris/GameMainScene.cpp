@@ -66,7 +66,7 @@ void GameMainScene_Update(void)
 	int Line_Count;
 
 	Line_Count = Get_Line();
-	if (Get_Combo() < 0)
+	if (Get_Combo() <= 1)
 	{
 		if (Line_Count >= 4)
 		{
@@ -119,6 +119,7 @@ void GameMainScene_Draw(void)
 	//ƒXƒRƒA‚ð•`‰æ
 	DrawFormatString(800, 100, GetColor(255, 255, 255), "%d", Score);
 	DrawFormatString(800, 200, GetColor(255, 255, 255), "%d", Level);
+	DrawFormatString(800, 0, GetColor(255, 255, 255), "%d", Get_Combo());
 	SetFontSize(20);
 }
 

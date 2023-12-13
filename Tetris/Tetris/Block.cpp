@@ -118,6 +118,7 @@ void turn_block(int clockwise);				//ブロック回転処理
 int  check_overlap(int x, int y);			//範囲外チェック処理
 void lock_block(int x, int y);				//着地したブロックを固定済みに変更する処理
 void check_line(void);						//ブロックの横一列確認処理
+void combo_check(void);
 
 /**********************************
 *ブロック機能:初期化処理
@@ -218,6 +219,8 @@ void Block_Update(void)
 			{
 				//ブロックの固定
 				lock_block(DropBlock_X, DropBlock_Y);
+				//コンボの確認
+				combo_check();
 				//ブロックの消去とブロックを下ろす処理
 				check_line();
 				//新しいブロックの生成
@@ -567,7 +570,6 @@ void check_line(void)
 			//行の途中が開いているか?
 			if (Field[i][j] == E_BLOCK_EMPTY)
 			{
-				Combo = 0;
 				break;
 			}
 		}
@@ -584,10 +586,45 @@ void check_line(void)
 				for (j = 1; j < FIELD_WIDTH; j++)
 				{
 					Field[k][j] = Field[k - 1][j];
-					Combo++;
 				}
 			}
 			PlaySoundMem(SoundEffect[0], DX_PLAYTYPE_BACK, TRUE);
+
 		}
+	}
+}
+
+/**********************************
+*ブロック機能:コンボの確認処理
+* 引　数:なし
+* 戻り値:なし
+**********************************/
+void combo_check(void)
+{
+	int i, j, k = 0;
+
+	for (i = 0; i < FIELD_HEIGHT - 1; i++)
+	{
+		for (j = 1; j < FIELD_WIDTH; j++)
+		{
+			//行の途中が開いているか?
+			if (Field[i][j] == E_BLOCK_EMPTY)
+			{
+				break;
+			}
+		}
+
+		if (j >= FIELD_WIDTH)
+		{
+			k++;
+		}
+	}
+	if (k >= 1)
+	{
+		Combo++;
+	}
+	else
+	{
+		Combo = 0;
 	}
 }
