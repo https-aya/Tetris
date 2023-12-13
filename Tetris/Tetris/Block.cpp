@@ -105,12 +105,6 @@ int Stock_Flg;												//ストックフラグ
 int Generate_Flg;											//生成フラグ
 int DeleteLine;												//消したラインの数
 int SoundEffect[3];											//SE
-int k;
-int Bom;
-float BomX1, BomY1;
-float BomX2, BomY2;
-int Bomflg;
-int BomImage;
 int Combo;
 
 /**********************************
@@ -124,8 +118,6 @@ void turn_block(int clockwise);				//ブロック回転処理
 int  check_overlap(int x, int y);			//範囲外チェック処理
 void lock_block(int x, int y);				//着地したブロックを固定済みに変更する処理
 void check_line(void);						//ブロックの横一列確認処理
-void move_box(void);
-void bom_line(void);
 
 /**********************************
 *ブロック機能:初期化処理
@@ -166,16 +158,6 @@ int Block_Initialize(void)
 	//消したラインの数の初期化
 	DeleteLine = 0;
 
-	k = 0;
-
-	BomX1 = 36.0f;
-	BomY1 = 6748.0f;
-
-	BomX2 = 396.0f;
-	BomY2 = 720.0f;
-
-	Bom = 2;
-	Bomflg = 0;
 	//エラーチェック
 	for (i = 0; i < 3; i++)
 	{
@@ -195,13 +177,6 @@ int Block_Initialize(void)
 **********************************/
 void Block_Update(void)
 {
-
-	if (k == 0)
-	{
-		if (GetButtonDown(XINPUT_BUTTON_LEFT_SHOULDER) == TRUE)
-		{
-			k = 1;
-		}
 		//ブロックの移動処理
 		move_block();
 		check_line();
@@ -251,21 +226,6 @@ void Block_Update(void)
 			//カウンタの初期化
 			WaitTime = 0;
 		}
-	}
-	else
-	{
-		move_box();
-		if (GetButtonDown(XINPUT_BUTTON_B) == TRUE)
-		{
-			Bom--;
-			Bomflg = 1;
-			bom_line();
-		}
-		if (GetButtonDown(XINPUT_BUTTON_A) == TRUE)
-		{
-			k = 0;
-		}
-	}
 }
 
 /**********************************
@@ -276,10 +236,6 @@ void Block_Update(void)
 void Block_Draw(void)
 {
 	int i, j;			//ループカウンタ
-	if (k == 1)
-	{
-		DrawBoxAA(BomX1, BomY1, BomX2, BomY2, 0xff4500, FALSE, 5);
-	}
 
 	//フィールドのブロックを描画
 	for (i = 0; i < FIELD_HEIGHT; i++)
@@ -315,10 +271,6 @@ void Block_Draw(void)
 		}
 	}
 
-	for (i = 0; i < Bom; i++)
-	{
-		DrawGraph((650 + i * BOM_SIZE), 672, BomImage, TRUE);
-	}
 }
 
 /**********************************
@@ -339,11 +291,6 @@ int Get_GenerateFlg(void)
 int Get_Line(void)
 {
 	return DeleteLine;
-}
-
-void Set_Bom(int bom)
-{
-	Bom += bom;
 }
 
 int Get_Combo(void)
