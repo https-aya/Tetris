@@ -119,7 +119,9 @@ void GameMainScene_Draw(void)
 	//ƒXƒRƒA‚ð•`‰æ
 	DrawFormatString(800, 100, GetColor(255, 255, 255), "%d", Score);
 	DrawFormatString(800, 200, GetColor(255, 255, 255), "%d", Level);
-	DrawFormatString(800, 0, GetColor(255, 255, 255), "%d", Get_Combo());
+	DrawFormatString(825, 300, GetColor(255, 255, 255), "%d", Get_Combo());
+	SetFontSize(70);
+	DrawFormatString(760, 400, 0xffffff, "COMBO");
 	SetFontSize(20);
 }
 

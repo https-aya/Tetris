@@ -340,6 +340,7 @@ void ranking_input_name_draw(void)
 	SetFontSize(35);
 	DrawFormatString(790, 530, 0xffffff, "消");
 	DrawFormatString(840, 530, 0xffffff, "決");
+	DrawFormatString(890, 530, 0xffffff, "終");
 	SetFontSize(20);
 
 	//選択している文字をフォーカスしている
