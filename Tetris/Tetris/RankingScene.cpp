@@ -36,6 +36,8 @@ int DispMode;								//表示モード
 T_CURSOR Cursor;							//カーソル用変数
 int name_num;
 
+int RankingScene;
+
 /**********************************
 *プロトタイプ宣言
 **********************************/
@@ -53,6 +55,7 @@ void ranking_input_name_draw(void);	//名前入力描画処理
 int RankingScene_Initialize(void)
 {
 	int ret = 0;
+	RankingScene = LoadGraph("images/ranking.png");
 	file_read();
 	switch (DispMode)
 	{
@@ -107,9 +110,10 @@ void RankingScene_Draw(void)
 			break;
 		case RANKING_DISP_MODE:
 		default:
+			DrawGraph(0, 0, RankingScene, TRUE);
 			for (i = 0; i < RANKING_MAX; i++)
 			{
-				DrawFormatString(20, 10 + (i * 25), GetColor(255, 255, 255), "%2d,%10s,%10d"
+				DrawFormatString(20, 300 + (i * 25), GetColor(255, 255, 255), "%2d,%10s,%10d"
 	, Ranking_Data[i].rank, Ranking_Data[i].name, Ranking_Data[i].score);
 			}
 			break;

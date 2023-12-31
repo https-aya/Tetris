@@ -13,6 +13,7 @@
 *変数宣言
 **********************************/
 int wait_count;
+int EndScene;
 
 /**********************************
 *プロトタイプ宣言
@@ -28,6 +29,8 @@ int EndScene_Initialize(void)
 	int ret = 0;
 
 	wait_count = 0;
+
+	EndScene = LoadGraph("images/end.png");
 
 	return ret;
 }
@@ -49,7 +52,7 @@ void EndScene_Update(void)
 **********************************/
 void EndScene_Draw(void)
 {
-	DrawString(10, 10, "エンド画面です", GetColor(55, 255, 255));
+	DrawGraph(0, 0, EndScene, TRUE);
 }
 
 /**********************************

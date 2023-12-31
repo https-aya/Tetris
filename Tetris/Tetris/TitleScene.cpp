@@ -23,6 +23,7 @@ enum
 **********************************/
 int cursor_number;
 int sounds[E_SOUND_MAX];
+int TitleScene;
 
 /**********************************
 *プロトタイプ宣言
@@ -42,6 +43,7 @@ int TitleScene_Initialize(void)
 	sounds[E_TITLE_BGM] = LoadSoundMem("sounds/BGM041.ogg");
 	sounds[E_TITLE_SE_CURSOR] = LoadSoundMem("sounds/SE1.mp3");
 	sounds[E_TITLE_SE_SELECT] = LoadSoundMem("sounds/SE2.mp3");
+	TitleScene = LoadGraph("images/title.png");
 
 	ChangeVolumeSoundMem(120, sounds[E_TITLE_SE_CURSOR]);
 	ChangeVolumeSoundMem(80, sounds[E_TITLE_SE_SELECT]);
@@ -123,12 +125,8 @@ void TitleScene_Update(void)
 **********************************/
 void TitleScene_Draw(void)
 {
-	SetFontSize(50);
-	DrawString(100, 100, "テトリス", GetColor(255, 255, 255));
-	DrawString(300, 300, "スタート", GetColor(255, 255, 255));
-	DrawString(300, 350, "ランキング", GetColor(255, 255, 255));
-	DrawString(300, 400, "エンド", GetColor(255, 255, 255));
+	DrawGraph(0, 0, TitleScene, TRUE);
 	SetFontSize(20);
 
-	DrawCircle(275, 325 + (cursor_number * 50), 15, GetColor(255, 0, 0));
+	DrawCircle(320, 340 + (cursor_number * 72), 20, GetColor(255, 0, 0));
 }
