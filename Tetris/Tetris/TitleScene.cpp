@@ -126,7 +126,6 @@ void TitleScene_Update(void)
 void TitleScene_Draw(void)
 {
 	DrawGraph(0, 0, TitleScene, TRUE);
-	SetFontSize(20);
 
 	DrawCircle(320, 340 + (cursor_number * 72), 20, GetColor(255, 0, 0));
 }
